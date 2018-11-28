@@ -1,0 +1,26 @@
+<!-- loggedIn var will have to be created  -->
+<!-- {{#unless loggedIn}}    -->
+<div id='loginOuterDiv'>
+  <div id='loginFormDiv' class="shadow">
+    <form action="/loginAttempt" method="post">
+
+      <label for="login">Login: </label>
+        </br>
+
+      <input id="login" class="input_box" type="text" name="login" >
+        </br>
+
+      <label for="password">Password: </label>
+        </br>
+
+      <input id="password" class="input_box" type="password" name="password">
+
+
+      <input id="login-submit" class="submit_button" type="submit" value="login">
+    </form>
+  </div>
+</div>
+<!-- {{/unless}} -->      
+<!-- see above, provides end of logic for including login window -->
+
+
