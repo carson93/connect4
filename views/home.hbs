@@ -11,16 +11,24 @@
         <h1> Connect 4 </h1>
     </div>
 
-    <button id="newGameButton">New Game</button>
 
-    <!-- <button id="saveGameButton">Save Game</button> -->
+     <!-- should probably do center with css but I don't want to break it -->
+    <center>
+    <button class='submit_button shadow' id="newGameButton">New Game</button>
 
-    <!-- <button id="loadGameButton">Load Game</button> -->
+    <a href="/RouteGoesHere"><button class='submit_button shadow'>Save Game</button></a>
 
+    <a href="/AndAgain"><button class='submit_button shadow'>Load Game</button></a>
+
+   
     <div id="board"></div>
+	</center>
 
-    <div id="loginDiv">
     {{> loginForm }}
+
+
+    
+
 </div>
 
 
