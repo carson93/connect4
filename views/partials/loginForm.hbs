@@ -1,6 +1,6 @@
 <!-- loggedIn var will have to be created  -->
 <!-- {{#unless loggedIn}}    -->
-<div id='loginOuterDiv'>
+<div id='loginOuterDiv' class="shadow">
   <div id='loginFormDiv' class="shadow">
     <form action="/loginAttempt" method="post">
 
@@ -14,12 +14,21 @@
         </br>
 
       <input id="password" class="input_box" type="password" name="password">
+        </br>
 
 
-      <input id="login-submit" class="submit_button" type="submit" value="login">
+      <input id="login-submit" class="submit_button shadow" type="submit" value="login">
     </form>
   </div>
+
+  <a href="/registrationForm"> 
+<button class='submit_button shadow'>Click Here Register!</button>
+</a>
 </div>
+
+
+
+
 <!-- {{/unless}} -->      
 <!-- see above, provides end of logic for including login window -->
 

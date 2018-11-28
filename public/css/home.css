@@ -15,3 +15,32 @@
     margin: 5px;
     top: 5px;
 }
+
+.shadow {
+    border:1px solid rgba(0,0,0,0.04);
+}
+
+h1{
+    text-align:center;
+}
+
+.input_box{
+
+}
+
+.submit_button
+{
+    background-color: #e7e7e7;
+    color: black;
+    border-radius: 12px;
+    margin: 15px;
+    padding: 16px;
+
+}
+
+#loginOuterDiv  {
+    text-align:center;
+    display:block;
+    position:relative;
+
+}
