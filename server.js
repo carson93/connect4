@@ -3,6 +3,7 @@ const homeRouter = require('./controllers/home');
 const loginRouter = require('./controllers/login');
 const registerRouter = require('./controllers/register');
 const logOutRouter = require('./controllers/logout');
+const newGameRouter = require('./controllers/new_game');
 
 const hbs = require('hbs');
 const cookieSession = require('cookie-session')
@@ -42,6 +43,7 @@ app.use('/', loginRouter);
 app.use('/', registerRouter);
 
 app.use('/', logOutRouter);
+app.use('/', newGameRouter);
 
 // start server
 const port = 8080 || process.env.PORT;

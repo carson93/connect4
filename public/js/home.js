@@ -8,6 +8,7 @@ var colState = [];
 var gameState = [];
 var playerState = PLAYER_ONE_COLOR;
 
+
 document.getElementById("newGameButton").addEventListener("click", function() {
     document.getElementById("board").innerHTML = "";
     colState = [];
@@ -51,17 +52,66 @@ var createMoves = () => {
         });
 
         document.getElementById("col" + x).addEventListener("click", function() {
+
             if (playerState == PLAYER_ONE_COLOR) {
                 gameState[x][colState[x]] = PLAYER_ONE_COLOR;
                 document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_ONE_COLOR;
                 colState[x]++;
                 playerState = PLAYER_TWO_COLOR;
+                write_move();
+
             } else if (playerState == PLAYER_TWO_COLOR) {
                 gameState[x][colState[x]] = PLAYER_TWO_COLOR;
                 document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
                 colState[x]++;
                 playerState = PLAYER_ONE_COLOR;
+                write_move();
             };
+            
         });
     };
 };
+
+
+
+var write_move = () => {
+
+    console.log(window.location.href);
+
+    var s = window.location.href;
+    var n = s.split('/');
+    console.log(n);
+    n.pop();
+    console.log(n);
+    var c = n.join('/');
+    console.log(c);
+
+    c = c + '/update_score';
+
+    my_window = window.open(c);
+    my_window.close()
+    return "Rwar";
+}
+
+// window.onbeforeunload = () => {
+
+//     console.log(window.location.href);
+
+//     var s = window.location.href;
+//     var n = s.split('/');
+//     console.log(n);
+//     n.pop();
+//     console.log(n);
+//     var c = n.join('/');
+//     console.log(c);
+
+//     c = c + '/update_score'
+
+//     my_window = window.open(c);
+//     my_window.close()
+//     return "Rwar";
+// }
+
+// var sendMovesToDatabase = () => {
+//     
+// }
