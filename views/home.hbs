@@ -24,7 +24,15 @@
     <div id="board"></div>
 	</center>
 
+    {{#unless loggedIn}}   
     {{> loginForm }}
+    {{/unless}}     
+
+
+    {{#if loggedIn}}
+    <a href="/logout"><button class='submit_button shadow'>Log Out</button></a>
+    {{/if}}
+
 
 
     
