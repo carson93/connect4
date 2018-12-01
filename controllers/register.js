@@ -5,7 +5,7 @@ const request = require('request');
 const bcrypt = require('bcrypt');
 const load_database = require('./load_database');
 const write_database = require('./write_database');
-const saltRounds = 10 | process.env.SALT;
+const saltRounds = process.env.SALT || 10;
 
 router.get('/registrationForm', (request, response) => {
 	response.render('registrationForm.hbs')
