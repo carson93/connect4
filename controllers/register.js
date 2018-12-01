@@ -39,6 +39,7 @@ router.post('/registrationAttempt', (request, response) => {
 
         bcrypt.hash(registration_data_dict['password'], saltRounds).then((hash) => {
             registration_data_dict['password'] = hash;
+            registration_data_dict['moves_made'] = 0;
             existing_users.push(registration_data_dict)
             return write_database.writeDatabase(existing_users);
         }).then((result) => {
