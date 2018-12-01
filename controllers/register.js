@@ -8,7 +8,7 @@ const write_database = require('./write_database');
 const saltRounds = process.env.SALT || 10;
 
 router.get('/registrationForm', (request, response) => {
-	response.render('registrationForm.hbs')
+    response.render('registrationForm.hbs')
 
 });
 
@@ -21,19 +21,17 @@ router.post('/registrationAttempt', (request, response) => {
         registration_data += chunk.toString(); // convert Buffer to string
     });
     request.on('end', () => {
-        // end of parsing form data
         registration_data_dict = parse(registration_data);
 
 
-        console.log(registration_data_dict);
 
         delete registration_data_dict["password_conf"];
 
         existing_users = load_database.getDatabase();
 
 
-            // add logic to check if the user has already registered
-            // also need logic in the HTML form to prevent bad emails, not duplicate passwords, etc
+        // add logic to check if the user has already registered
+        // also need logic in the HTML form to prevent bad emails, not duplicate passwords, etc
 
         console.log(existing_users);
 
@@ -44,10 +42,9 @@ router.post('/registrationAttempt', (request, response) => {
             return write_database.writeDatabase(existing_users);
         }).then((result) => {
             if (result) {
-                response.render('home.hbs', {
-                    loginForm: true
-                });
+                response.end('<a href=\'\/\'>Registration Complete! Click to return to connect4<\/a>');
             }
+            response.end();
         }).catch((error) => {
             console.log('Something went wrong writing the database.. \n error message:', error);
         }).catch((error) => {
@@ -55,12 +52,17 @@ router.post('/registrationAttempt', (request, response) => {
         })
 
 
-        // here is where we should save to the JSON FILE
 
-        response.render('home.hbs', {
-            loginForm: true
-        })
     });
+
+});
+
+
+router.get('/redirect', (request, response) => {
+    response.render('home.hbs', {
+        loggedIn: request.session.loggedIn
+    })
+
 });
 
 
