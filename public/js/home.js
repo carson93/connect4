@@ -34,7 +34,9 @@ class AI_API {
 
     // redundant repeat of above method, simplified
     static clickColumn(column_number) {
-        if (document.getElementById('col' + column_number) == null) {
+
+        console.log(colState);
+        if (colState[column_number] >= 6) {
             return false;
         } else {
             document.getElementById('col' + column_number).click();
@@ -49,10 +51,9 @@ class AI_API {
     static run_random_ai(opponent_move, board_state) {
         console.log('random ai move ');
         do {
-            var AI_move = Math.floor(Math.random() * 10000000000000000) % 8;
+            var AI_move = Math.floor(Math.random() * 10000000000000000) % 7;
             console.log(AI_move);
             var valid_move = this.clickColumn(AI_move);
-            console.log(valid_move);
         } while (valid_move == false)
 
     }
