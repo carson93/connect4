@@ -46,7 +46,8 @@ app.use('/', logOutRouter);
 app.use('/', newGameRouter);
 
 // start server
-const port = 8080 || process.env.PORT;
-app.listen(port, () => {
+var server_host = process.env.YOUR_HOST || '0.0.0.0';
+const port = process.env.PORT || 8080;
+app.listen(port, server_host, () => {
     console.log('Server is up on the port', port);
 });
