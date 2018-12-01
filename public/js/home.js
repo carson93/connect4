@@ -34,7 +34,7 @@ class AI_API {
 
     // redundant repeat of above method, simplified
     static clickColumn(column_number) {
-
+        console.log(gameState);
         console.log(colState);
         if (colState[column_number] >= 6) {
             return false;
@@ -51,15 +51,28 @@ class AI_API {
     static run_random_ai(opponent_move, board_state) {
         console.log('random ai move ');
         do {
-            var AI_move = Math.floor(Math.random() * 10000000000000000) % 7;
+            var AI_move = Math.floor(Math.random() * 100000) % 7;
             console.log(AI_move);
             var valid_move = this.clickColumn(AI_move);
         } while (valid_move == false)
 
     }
     static run_copy_cat_ai(opponent_move, board_state) {
-        return
+        console.log('random ai move ');
+        valid_move == true;
+        do {
+            var AI_move = opponent_move;
+            if (valid_move == false) {
+                AI_move = Math.floor(Math.random() * 100000) % 7;
+            }
+            console.log(AI_move);
+            var valid_move = this.clickColumn(AI_move);
+        } while (valid_move == false)
 
+    }
+
+    static run_copy_cat_improved_ai(opponent_move, board_state) {
+        return
     }
 
     static run_your_ai(opponent_move, board_state) {
@@ -147,22 +160,30 @@ var createMoves = () => {
                     colState[x]++;
                     playerState = PLAYER_TWO_COLOR;
                     write_move();
+                    winner = check_for_winner(PLAYER_ONE_COLOR);
+                    if (winner) {
+                        document.getElementById("board").innerHTML = PLAYER_ONE_COLOR +" wins!!!!!";
+                    }
 
                     // start ai code if needed
                     if (AI_ON == true && playerState == PLAYER_TWO_COLOR) {
                         // console.log('initialize AI');
                         const I_Robot = new AI_API();
                         console.log('run ai start');
-                        AI_API.run_random_ai(x);
+                        AI_API.run_random_ai(x, []);
                     }
+                    // end ai code
 
                 } else if (playerState == PLAYER_TWO_COLOR) {
-                    // if the AI is off, allow the player to play both colors
 
                     gameState[x][colState[x]] = PLAYER_TWO_COLOR;
                     document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
                     colState[x]++;
                     playerState = PLAYER_ONE_COLOR;
+                    winner = check_for_winner(PLAYER_TWO_COLOR);
+                    if (winner) {
+                        document.getElementById("board").innerHTML = PLAYER_TWO_COLOR +" wins!!!!!";
+                    }
                 };
             }
 
@@ -170,9 +191,83 @@ var createMoves = () => {
     };
 };
 
-var check_for_winner = () => {
-    return
+var check_for_winner = (current_player_color) => {
+    console.log('in check for win')
+    if (check_horiz(current_player_color)) {
+        console.log('winner! horizontal')
+        return true;
+    }
+
+    if (check_vert(current_player_color)) {
+        console.log('winner! vertical')
+        return true;
+    }
+    // check_top_right_left_vert(current_player_color);
+    // check_bottom_left_left_vert(current_player_color);
+    // check_top_right_vert(current_player_color);
+    // check_bottom_right_vert(current_player_color);
+    console.log('winner check complete')
+    return false
 }
+
+
+var check_horiz = (current_player_color) => {
+    var connect4_win = 0;
+    for (let row = 0; row < gameState[0].length; row++) {
+
+        for (let column = 0; column < gameState.length; column++) {
+           
+            console.log(gameState[column][row]);
+            console.log(current_player_color);
+            if (gameState[column][row] == current_player_color) {
+                connect4_win += 1;
+                if (connect4_win >= 4){
+                    console.log('horiz winner true');
+                    return true
+                }
+            } else {
+                connect4_win = 0;
+            }
+
+
+        }
+    }
+    return false
+}
+
+var check_vert = (current_player_color) => {
+    var connect4_win = 0;
+    for (let column = 0; column < gameState.length; column++) {
+        for (let color_index = 0; color_index < gameState[column].length; color_index++) {
+            if (gameState[column][color_index] == current_player_color) {
+                connect4_win += 1;
+                if (connect4_win >= 4){
+                    return true
+                }
+            } else {
+                connect4_win = 0;
+            }
+        }
+    }
+    return false;
+}
+
+var check_top_right_left_vert = (current_player_color) => {
+
+}
+
+var check_bottom_left_left_vert = (current_player_color) => {
+
+}
+
+var check_top_right_vert = (current_player_color) => {
+
+}
+
+var check_bottom_right_vert = (current_player_color) => {
+
+}
+
 
 var write_move = () => {
 
