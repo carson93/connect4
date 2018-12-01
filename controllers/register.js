@@ -57,13 +57,13 @@ router.post('/registrationAttempt', (request, response) => {
 
 });
 
+// // this doesnt nothing
+// router.get('/redirect', (request, response) => {
+//     response.render('home.hbs', {
+//         loggedIn: request.session.loggedIn
+//     })
 
-router.get('/redirect', (request, response) => {
-    response.render('home.hbs', {
-        loggedIn: request.session.loggedIn
-    })
-
-});
+// });
 
 
 module.exports = router;
