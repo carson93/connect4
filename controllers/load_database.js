@@ -11,7 +11,7 @@ var getDatabase = () => {
             // read and return the inventory into a JSON
             var users_database = JSON.parse(readJSON);
         } else {
-            users_database = [{"login":"", "password":"", "email":""}]
+            users_database = []
         }
 
         return users_database

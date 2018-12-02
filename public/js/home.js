@@ -38,6 +38,8 @@ class AI_API {
         console.log(colState);
         if (colState[column_number] >= 6) {
             return false;
+        } else if (document.getElementById('col' + column_number) == null) {
+            return true;
         } else {
             document.getElementById('col' + column_number).click();
             return true;
@@ -162,7 +164,10 @@ var createMoves = () => {
                     write_move();
                     winner = check_for_winner(PLAYER_ONE_COLOR);
                     if (winner) {
-                        document.getElementById("board").innerHTML = PLAYER_ONE_COLOR +" wins!!!!!";
+                        // document.getElementById("board").prepend(document.createTextNode(PLAYER_ONE_COLOR + " wins!!!!!          \n\n\n            "));
+                        // it'd be nice to freeze the board here
+                        game_over = true;
+
                     }
 
                     // start ai code if needed
@@ -170,7 +175,8 @@ var createMoves = () => {
                         // console.log('initialize AI');
                         const I_Robot = new AI_API();
                         console.log('run ai start');
-                        AI_API.run_random_ai(x, []);
+                        // slice prevents any  ai action from breaking the game, I hope
+                        AI_API.run_random_ai(x, gameState.slice(0));
                     }
                     // end ai code
 
@@ -182,7 +188,7 @@ var createMoves = () => {
                     playerState = PLAYER_ONE_COLOR;
                     winner = check_for_winner(PLAYER_TWO_COLOR);
                     if (winner) {
-                        document.getElementById("board").innerHTML = PLAYER_TWO_COLOR +" wins!!!!!";
+                        // document.getElementById("board").prepend(document.createTextNode(PLAYER_TWO_COLOR + " wins!!!!!"));
                     }
                 };
             }
@@ -190,6 +196,7 @@ var createMoves = () => {
         });
     };
 };
+
 
 var check_for_winner = (current_player_color) => {
     console.log('in check for win')
@@ -202,7 +209,10 @@ var check_for_winner = (current_player_color) => {
         console.log('winner! vertical')
         return true;
     }
-    // check_top_right_left_vert(current_player_color);
+        if (check_top_right_left_vert(current_player_color)) {
+        console.log('winner! top_right_left_vert')
+        return true;
+    }
     // check_bottom_left_left_vert(current_player_color);
     // check_top_right_vert(current_player_color);
     // check_bottom_right_vert(current_player_color);
@@ -214,14 +224,11 @@ var check_for_winner = (current_player_color) => {
 var check_horiz = (current_player_color) => {
     var connect4_win = 0;
     for (let row = 0; row < gameState[0].length; row++) {
-
         for (let column = 0; column < gameState.length; column++) {
-           
-            console.log(gameState[column][row]);
-            console.log(current_player_color);
             if (gameState[column][row] == current_player_color) {
                 connect4_win += 1;
-                if (connect4_win >= 4){
+                if (connect4_win >= 4) {
+                    // could make em glow here
                     console.log('horiz winner true');
                     return true
                 }
@@ -241,7 +248,7 @@ var check_vert = (current_player_color) => {
         for (let color_index = 0; color_index < gameState[column].length; color_index++) {
             if (gameState[column][color_index] == current_player_color) {
                 connect4_win += 1;
-                if (connect4_win >= 4){
+                if (connect4_win >= 4) {
                     return true
                 }
             } else {
@@ -252,12 +259,30 @@ var check_vert = (current_player_color) => {
     return false;
 }
 
-var check_top_right_left_vert = (current_player_color) => {
-
-}
 
 var check_bottom_left_left_vert = (current_player_color) => {
 
+}
+
+var check_top_right_left_vert = (current_player_color) => {
+    var connect4_win = 0;
+    // column starts early as half of downward left to right vert already checked
+    for (let column = 1; column < gameState.length-4; column++) {
+        for (let color_index = 1; color_index < gameState[column].length-4; color_index++) {
+            console.log(gameState[column][color_index]);
+            console.log(current_player_color);
+            if (gameState[column][color_index] == current_player_color) {
+
+                console.log('equality true');
+                connect4_win += 1;
+                if (connect4_win >= 4) {
+                    return true
+                }
+            } else {
+                connect4_win = 0;
+            }
+        }
+    }
 }
 
 var check_top_right_vert = (current_player_color) => {
