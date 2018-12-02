@@ -19,7 +19,7 @@ router.get('/update_score', (request, response) => {
     }
 
     console.log(existing_users[user_data_index]);
-    existing_users[user_data_index]["score"] += 1;
+    existing_users[user_data_index]["moves_made"] += 1;
     write_database.writeDatabase(existing_users);
 
     }

@@ -6,17 +6,6 @@ const load_database = require('./load_database');
 const bcrypt = require('bcrypt');
 
 router.post('/loginAttempt', (request, response) => {
-
-
-    // credit to : https://itnext.io/how-to-handle-the-post-request-body-in-node-js-without-using-a-framework-cd2038b93190
-    // for this parsing, not sure why its necessary though.
-    // let login_data = '';
-    // request.on('data', chunk => {
-    //     login_data += chunk.toString(); // convert Buffer to string
-    // });
-    // request.on('end', () => {
-        // end of parsing form data
-        // login_data_dict = parse(login_data);
     var login_data_dict = request.body;
         var user_data = 0;
 
@@ -32,12 +21,17 @@ router.post('/loginAttempt', (request, response) => {
 
         // not sure this is wroking
         // user isnt in database
-        if (!user_data) {
-            console.log('why doesnt it render');
-            response.render('registrationForm.hbs')
+        if (!user_data || existing_users == []) {
+            console.log('please register');
+            response.render('registrationForm.hbs', {
+            formData_error: false,
+            nameIsNotValid: false,
+            duplicateName: false,
+            passIsNotValid: false,
+            passMatches: false,
+            emailIsNotValid: false
+        })
         }
-
-        // database is empty
         else
 
         {
