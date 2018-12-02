@@ -10,13 +10,14 @@ router.post('/loginAttempt', (request, response) => {
 
     // credit to : https://itnext.io/how-to-handle-the-post-request-body-in-node-js-without-using-a-framework-cd2038b93190
     // for this parsing, not sure why its necessary though.
-    let login_data = '';
-    request.on('data', chunk => {
-        login_data += chunk.toString(); // convert Buffer to string
-    });
-    request.on('end', () => {
+    // let login_data = '';
+    // request.on('data', chunk => {
+    //     login_data += chunk.toString(); // convert Buffer to string
+    // });
+    // request.on('end', () => {
         // end of parsing form data
-        login_data_dict = parse(login_data);
+        // login_data_dict = parse(login_data);
+    var login_data_dict = request.body;
         var user_data = 0;
 
         existing_users = load_database.getDatabase();
@@ -57,7 +58,6 @@ router.post('/loginAttempt', (request, response) => {
             })
 
         }
-    });
 });
 
 module.exports = router;
