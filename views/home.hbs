@@ -6,7 +6,7 @@
     <link href="/css/home.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body onbeforeunload="return">
     <div>
         <h1> Connect 4 </h1>
     </div>
@@ -15,21 +15,26 @@
      <!-- should probably do center with css but I don't want to break it -->
     <center>
     <button class='submit_button shadow' id="newGameButton">New Game</button>
+    <a href="/newgame"><button class='submit_button shadow'>Test New Game</button></a>
 
-    <a href="/RouteGoesHere"><button id="saveGameButton" class='submit_button shadow'>Save Game</button></a>
+    <button class='submit_button shadow' id='AI_NewGame'>New Game Against AI</button>
 
-    <a href="/AndAgain"><button class='submit_button shadow'>Load Game</button></a>
+    <button id="saveGameButton" class='submit_button shadow'>Save Game</button>
+
+    <button id="loadGameButton" class='submit_button shadow'>Load Game</button>
 
    
     <div id="board"></div>
 	</center>
 
+    {{#unless loggedIn}}   
     {{> loginForm }}
+    {{/unless}}     
 
 
-    
-
-</div>
+    {{#if loggedIn}}
+    <a href="/logout"><button class='submit_button shadow'>Log Out</button></a>
+    {{/if}}
 
 
 
