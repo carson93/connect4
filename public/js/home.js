@@ -3,6 +3,11 @@ const COLUMNS = 7;
 const EMPTY_SLOT_COLOR = "white";
 const PLAYER_ONE_COLOR = "yellow";
 const PLAYER_TWO_COLOR = "red";
+const FILEPATH = '../game_save/data.json';
+console.log('hello');
+const saveGame = require('./save_game');
+console.log('hello');
+const loadGame = require('./load_game');
 
 var colState = [];
 var gameState = [];
@@ -16,6 +21,10 @@ document.getElementById("newGameButton").addEventListener("click", function() {
     createBoard();
     createMoves();
 });
+
+document.getElementById("saveGameButton").addEventListener("click", function() {
+
+})
 
 var createBoard = () => {
     for (let x = 0; x < COLUMNS; x++) {
