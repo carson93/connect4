@@ -4,7 +4,7 @@ const EMPTY_SLOT_COLOR = "white";
 const PLAYER_ONE_COLOR = "yellow";
 const PLAYER_TWO_COLOR = "red";
 const FILEPATH = 'game_save/data.json';
-const EMPTY_COL_STATE = [0,0,0,0,0,0,0];
+const EMPTY_COL_STATE = [0, 0, 0, 0, 0, 0, 0];
 const EMPTY_GAME_STATE = [];
 
 var colState = EMPTY_COL_STATE;
@@ -68,7 +68,7 @@ class AI_API {
 
 
 document.getElementById("AI_NewGame").addEventListener("click", function() {
-    colState = [0,0,0,0,0,0,0];
+    colState = [0, 0, 0, 0, 0, 0, 0];
     newGameState();
     playerState = PLAYER_ONE_COLOR;
     AI_ON = true;
@@ -78,7 +78,7 @@ document.getElementById("AI_NewGame").addEventListener("click", function() {
 });
 
 document.getElementById("newGameButton").addEventListener("click", function() {
-    colState = [0,0,0,0,0,0,0];
+    colState = [0, 0, 0, 0, 0, 0, 0];
     newGameState();
     playerState = PLAYER_ONE_COLOR;
     AI_ON = false;
@@ -92,7 +92,7 @@ document.getElementById("saveGameButton").addEventListener("click", function() {
         localStorage.setItem("gameState", JSON.stringify(gameState));
         localStorage.setItem("colState", JSON.stringify(colState));
         alert('Game successfully saved');
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         alert('Game cannot be saved');
     }
@@ -104,7 +104,7 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
         colState = JSON.parse(localStorage.getItem("colState"));
         createBoard();
         createMoves();
-    } catch(error) {
+    } catch (error) {
         console.log(error);
         alert('Game cannot be loaded');
     }
@@ -228,30 +228,30 @@ var end_game = (player_color) => {
     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
 
 
-}
+};
 
 
 var check_for_winner = (current_player_color) => {
     console.log('in check for win')
     if (check_horiz(current_player_color)) {
-        console.log('winner! horizontal')
+        console.log('winner! horizontal');
         return true;
     }
 
     if (check_vert(current_player_color)) {
-        console.log('winner! vertical')
+        console.log('winner! vertical');
         return true;
     }
     if (check_top_right_left_vert(current_player_color)) {
-        console.log('winner! top_right_left_vert')
+        console.log('winner! top_right_left_vert');
         return true;
     }
     // check_bottom_left_left_vert(current_player_color);
     // check_top_right_vert(current_player_color);
     // check_bottom_right_vert(current_player_color);
     // console.log('winner check complete')
-    return false
-}
+    return false;
+};
 
 
 var check_horiz = (current_player_color) => {
@@ -264,21 +264,23 @@ var check_horiz = (current_player_color) => {
             if (gameState[column][row] == current_player_color) {
                 connect4_win += 1;
                 if (connect4_win >= 4) {
-            if (gameState[column][row] == current_player_color) {
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    // could make em glow here
-                    console.log('horiz winner true');
-                    return true
+                    if (gameState[column][row] == current_player_color) {
+                        connect4_win += 1;
+                        if (connect4_win >= 4) {
+                            // could make em glow here
+                            console.log('horiz winner true');
+                            return true
+                        }
+                    } else {
+                        connect4_win = 0;
+                    }
+
+
                 }
-            } else {
-                connect4_win = 0;
             }
-
-
+            return false
         }
     }
-    return false
 }
 
 var check_vert = (current_player_color) => {
@@ -348,15 +350,15 @@ var write_move = () => {
     c = c + '/update_score';
 
     my_window = window.open(c);
-    my_window.close()
+    my_window.close();
     return "Rwar";
-}
+};
 
-var print_column_full = (column_number) => {
+var print_column_full = () => {
     // should probably also get called on mouseover, depending how its implemented
     console.log('print_column_full was called');
-    return;
-}
+    return "Rwar";
+};
 
 // window.onbeforeunload = () => {
 
