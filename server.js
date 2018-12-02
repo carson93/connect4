@@ -6,9 +6,9 @@ const logOutRouter = require('./controllers/logout');
 const newGameRouter = require('./controllers/new_game');
 
 const hbs = require('hbs');
-const cookieSession = require('cookie-session')
+var cookieSession = require('cookie-session')
 // const fun = require('./server_functions.js');
-
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -22,6 +22,12 @@ app.use(cookieSession({
   // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
+
+
+// this might let us use request.body..
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 
 
