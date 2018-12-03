@@ -26,7 +26,8 @@ router.get('/update_score', (request, response) => {
 
 
     response.render('home.hbs', {
-    	loggedIn: request.session.loggedIn
+    	loggedIn: request.session.loggedIn,
+    	user: existing_users
     });
 });
 

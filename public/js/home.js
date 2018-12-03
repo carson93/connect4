@@ -335,24 +335,43 @@ var check_bottom_right_vert = (current_player_color) => {
 }
 
 
-var write_move = () => {
+// var write_move = () => {
 
-    // console.log(window.location.href);
+//     // console.log(window.location.href);
 
+//     var s = window.location.href;
+//     var n = s.split('/');
+//     console.log(n);
+//     n.pop();
+//     console.log(n);
+//     var c = n.join('/');
+//     console.log(c);
+
+//     c = c + '/update_score';
+
+//     my_window = window.open(c);
+//     my_window.close();
+//     return "Rwar";
+// };
+
+var write_move = () =>
+{
     var s = window.location.href;
     var n = s.split('/');
-    // console.log(n);
     n.pop();
-    // console.log(n);
     var c = n.join('/');
-    // console.log(c);
 
-    c = c + '/update_score';
-
-    my_window = window.open(c);
-    my_window.close();
-    return "Rwar";
-};
+    theUrl = c + '/update_score';
+    var theUrl = c;
+    // the above two vars used to be arguments
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            console.log(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
 
 var print_column_full = () => {
     // should probably also get called on mouseover, depending how its implemented

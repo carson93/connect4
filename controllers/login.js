@@ -40,11 +40,14 @@ router.post('/loginAttempt', (request, response) => {
                 if (comparison_valid) {
                     request.session.loggedIn = true;
                     request.session.userName = user_data['login'];
+                    request.session.usersDatabase = existing_users;
                     response.render('home.hbs', {
-                        loggedIn: request.session.loggedIn
+                        loggedIn: request.session.loggedIn,
+                        user: request.session.usersDatabase
                     })
 
                 } else {
+                    var users = {users:existing_users};
                     response.render('home.hbs', {
                         loggedIn: request.session.loggedIn
                     })

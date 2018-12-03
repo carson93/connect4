@@ -5,6 +5,7 @@ const registerRouter = require('./controllers/register');
 const logOutRouter = require('./controllers/logout');
 const newGameRouter = require('./controllers/new_game');
 const bodyParser = require('body-parser');
+const getMovesRouter = require('./controllers/get_moves');
 
 const hbs = require('hbs');
 var cookieSession = require('cookie-session')
@@ -54,6 +55,7 @@ app.use('/', registerRouter);
 
 app.use('/', logOutRouter);
 app.use('/', newGameRouter);
+app.use('/', getMovesRouter);
 
 // start server
 var server_host = process.env.YOUR_HOST || '0.0.0.0';
