@@ -68,21 +68,15 @@ class AI_API {
 
 
 document.getElementById("AI_NewGame").addEventListener("click", function() {
-    colState = [0, 0, 0, 0, 0, 0, 0];
     newGameState();
-    playerState = PLAYER_ONE_COLOR;
     AI_ON = true;
-    game_over = false;
     createBoard();
     createMoves();
 });
 
 document.getElementById("newGameButton").addEventListener("click", function() {
-    colState = [0, 0, 0, 0, 0, 0, 0];
     newGameState();
-    playerState = PLAYER_ONE_COLOR;
     AI_ON = false;
-    game_over = false;
     createBoard();
     createMoves();
 });
@@ -111,6 +105,10 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
 })
 
 var newGameState = () => {
+    document.getElementById("winner_notif").style.height = '0px';
+    document.getElementById("winner_notif").innerHTML = '';
+    playerState = PLAYER_ONE_COLOR;
+    colState = [0, 0, 0, 0, 0, 0, 0];
     gameState = [];
 
     for (let col = 0; col < COLUMNS; col++) {
@@ -220,7 +218,6 @@ var end_game = (player_color) => {
 
     // newColumn.id = "col" + x;
     // appendChild
-
     document.getElementById("winner_notif").style.height = '115px';
 
     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));

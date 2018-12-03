@@ -5,10 +5,8 @@ const load_database = require('./load_database');
 const write_database = require('./write_database');
 
 router.get('/update_score', (request, response) => {
-	console.log('IN update score');
 	if (request.session.loggedIn)
 	{
-	console.log(request.session.userName);
 	existing_users = load_database.getDatabase();
 
     for (i = 0; i < existing_users.length; i++) {
@@ -18,8 +16,6 @@ router.get('/update_score', (request, response) => {
             user_data_index = i;
         }
     }
-
-    console.log(existing_users[user_data_index]);
     existing_users[user_data_index]["moves_made"] += 1;
     write_database.writeDatabase(existing_users);
 
