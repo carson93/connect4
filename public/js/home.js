@@ -225,132 +225,47 @@ var end_game = (player_color) => {
 
 };
 
-
 var check_for_winner = (current_player_color) => {
-    console.log('in check for win')
-    if (check_horiz(current_player_color)) {
-        console.log('winner! horizontal');
-        return true;
-    }
+    // credit to 4castle https://codereview.stackexchange.com/questions/127091/java-connect-four-four-in-a-row-detection-algorithms
+    // for this function
+    const row_length = gameState[0].length;
+    const col_length = gameState.length;
 
-    if (check_vert(current_player_color)) {
-        console.log('winner! vertical');
-        return true;
-    }
-    if (check_top_right_left_vert(current_player_color)) {
-        console.log('winner! top_right_left_vert');
-        return true;
-    }
-    // check_bottom_left_left_vert(current_player_color);
-    // check_top_right_vert(current_player_color);
-    // check_bottom_right_vert(current_player_color);
-    // console.log('winner check complete')
-    return false;
-};
+    for (let row = 0; row < col_length; row++) { // iterate rows, bottom to top
+        for (let col = 0; col < row_length; col++) { // iterate columns, left to right
+            var player = gameState[col][row];
+            if (player == EMPTY_SLOT_COLOR)
+                continue; // don't check empty slots
 
-
-var check_horiz = (current_player_color) => {
-    var connect4_win = 0;
-    for (let row = 0; row < gameState[0].length; row++) {
-        for (let column = 0; column < gameState.length; column++) {
-
-            console.log(gameState[column][row]);
-            console.log(current_player_color);
-            if (gameState[column][row] == current_player_color) {
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    if (gameState[column][row] == current_player_color) {
-                        connect4_win += 1;
-                        if (connect4_win >= 4) {
-                            // could make em glow here
-                            console.log('horiz winner true');
-                            return true
-                        }
-                    } else {
-                        connect4_win = 0;
-                    }
-
-
-                }
-            }
-            return false
-        }
-    }
-}
-
-var check_vert = (current_player_color) => {
-    var connect4_win = 0;
-    for (let column = 0; column < gameState.length; column++) {
-        for (let color_index = 0; color_index < gameState[column].length; color_index++) {
-            if (gameState[column][color_index] == current_player_color) {
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    return true
-                }
-            } else {
-                connect4_win = 0;
+            if (col + 3 < row_length &&
+                player == gameState[col + 1][row] && // look right
+                player == gameState[col + 2][row] &&
+                player == gameState[col + 3][row])
+                return player;
+            if (row + 3 < col_length) {
+                if (player == gameState[col][row + 1] && // look up
+                    player == gameState[col][row + 2] &&
+                    player == gameState[col][row + 3])
+                    return player;
+                if (col + 3 < row_length &&
+                    player == gameState[col + 1][row + 1] && // look up & right
+                    player == gameState[col + 2][row + 2] &&
+                    player == gameState[col + 3][row + 3])
+                    return player;
+                if (col - 3 >= 0 &&
+                    player == gameState[col - 1][row + 1] && // look up & left
+                    player == gameState[col - 2][row + 2] &&
+                    player == gameState[col - 3][row + 3])
+                    return player;
             }
         }
     }
-    return false;
+    return false
 }
 
 
-var check_bottom_left_left_vert = (current_player_color) => {
 
-}
-
-var check_top_right_left_vert = (current_player_color) => {
-    var connect4_win = 0;
-    // column starts early as half of downward left to right vert already checked
-    for (let column = 1; column < gameState.length - 4; column++) {
-        for (let color_index = 1; color_index < gameState[column].length - 4; color_index++) {
-            // console.log(gameState[column][color_index]);
-            // console.log(current_player_color);
-            if (gameState[column][color_index] == current_player_color) {
-
-                // console.log('equality true');
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    return true
-                }
-            } else {
-                connect4_win = 0;
-            }
-        }
-    }
-}
-
-var check_top_right_vert = (current_player_color) => {
-
-}
-
-var check_bottom_right_vert = (current_player_color) => {
-
-}
-
-
-// var write_move = () => {
-
-//     // console.log(window.location.href);
-
-//     var s = window.location.href;
-//     var n = s.split('/');
-//     // console.log(n);
-//     n.pop();
-//     // console.log(n);
-//     var c = n.join('/');
-//     // console.log(c);
-
-//     c = c + '/update_score';
-
-//     my_window = window.open(c);
-//     my_window.close();
-//     return "Rwar";
-// };
-
-var write_move = () =>
-{
+var write_move = () => {
     var s = window.location.href;
     var n = s.split('/');
     n.pop();
@@ -359,7 +274,7 @@ var write_move = () =>
     var theUrl = c + '/update_score';
     // the above two vars used to be arguments
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             console.log(xmlHttp.responseText);
     }
@@ -373,25 +288,3 @@ var print_column_full = () => {
     return "Rwar";
 };
 
-// window.onbeforeunload = () => {
-
-//     console.log(window.location.href);
-
-//     var s = window.location.href;
-//     var n = s.split('/');
-//     console.log(n);
-//     n.pop();
-//     console.log(n);
-//     var c = n.join('/');
-//     console.log(c);
-
-//     c = c + '/update_score'
-
-//     my_window = window.open(c);
-//     my_window.close()
-//     return "Rwar";
-// }
-
-// var sendMovesToDatabase = () => {
-//     
-// }
