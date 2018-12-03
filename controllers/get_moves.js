@@ -5,6 +5,7 @@ const load_database = require('./load_database');
 const write_database = require('./write_database');
 
 router.get('/update_score', (request, response) => {
+	console.log('IN update score');
 	if (request.session.loggedIn)
 	{
 	console.log(request.session.userName);
@@ -24,11 +25,11 @@ router.get('/update_score', (request, response) => {
 
     }
 
-
-    response.render('home.hbs', {
-    	loggedIn: request.session.loggedIn,
-    	user: existing_users
-    });
+    response.send(null);
+    // response.render('home.hbs', {
+    // 	loggedIn: request.session.loggedIn,
+    // 	user: existing_users
+    // });
 });
 
 module.exports = router;

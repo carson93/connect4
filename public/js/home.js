@@ -176,7 +176,6 @@ var createMoves = () => {
 
                     winner = check_for_winner(PLAYER_ONE_COLOR);
                     if (winner) {
-                        document.getElementById("board").innerHTML = PLAYER_ONE_COLOR + " wins!!!!!";
                         end_game(PLAYER_ONE_COLOR);
                     }
 
@@ -200,7 +199,6 @@ var createMoves = () => {
 
                     winner = check_for_winner(PLAYER_TWO_COLOR);
                     if (winner) {
-                        document.getElementById("board").innerHTML = PLAYER_TWO_COLOR + " wins!!!!!";
                         end_game(PLAYER_TWO_COLOR);
                     }
                 };
@@ -341,11 +339,11 @@ var check_bottom_right_vert = (current_player_color) => {
 
 //     var s = window.location.href;
 //     var n = s.split('/');
-//     console.log(n);
+//     // console.log(n);
 //     n.pop();
-//     console.log(n);
+//     // console.log(n);
 //     var c = n.join('/');
-//     console.log(c);
+//     // console.log(c);
 
 //     c = c + '/update_score';
 
@@ -361,8 +359,7 @@ var write_move = () =>
     n.pop();
     var c = n.join('/');
 
-    theUrl = c + '/update_score';
-    var theUrl = c;
+    var theUrl = c + '/update_score';
     // the above two vars used to be arguments
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
@@ -371,7 +368,7 @@ var write_move = () =>
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
-}
+};
 
 var print_column_full = () => {
     // should probably also get called on mouseover, depending how its implemented
