@@ -108,7 +108,7 @@ var newGameState = () => {
     document.getElementById("winner_notif").style.height = '0px';
     document.getElementById("winner_notif").innerHTML = '';
     playerState = PLAYER_ONE_COLOR;
-    colState = [0, 0, 0, 0, 0, 0, 0];
+    colState = EMPTY_COL_STATE.slice(0);
     gameState = [];
 
     for (let col = 0; col < COLUMNS; col++) {
