@@ -1,3 +1,5 @@
+import end_game from './win.js';
+
 const ROWS = 6;
 const COLUMNS = 7;
 const EMPTY_SLOT_COLOR = "white";
@@ -91,6 +93,8 @@ document.getElementById("saveGameButton").addEventListener("click", function() {
     try {
         localStorage.setItem("gameState", JSON.stringify(gameState));
         localStorage.setItem("colState", JSON.stringify(colState));
+        localStorage.setItem("playerState", playerState);
+        localStorage.setItem("AI_ON", String(AI_ON));
         alert('Game successfully saved');
     } catch (error) {
         console.log(error);
@@ -102,6 +106,8 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
     try {
         gameState = JSON.parse(localStorage.getItem("gameState"));
         colState = JSON.parse(localStorage.getItem("colState"));
+        playerState = localStorage.getItem("playerState");
+        AI_ON = localStorage.getItem("AI_ON") === 'true';
         createBoard();
         createMoves();
     } catch (error) {
@@ -209,24 +215,24 @@ var createMoves = () => {
     };
 };
 
-var end_game = (player_color) => {
-    for (let x = 0; x < COLUMNS; x++) {
-        var el = document.getElementById('col' + x),
-            elClone = el.cloneNode(true);
+// var end_game = (player_color) => {
+//     for (let x = 0; x < COLUMNS; x++) {
+//         var el = document.getElementById('col' + x),
+//             elClone = el.cloneNode(true);
 
-        el.parentNode.replaceChild(elClone, el);
-    }
-    // var newColumn = document.createElement("div");
+//         el.parentNode.replaceChild(elClone, el);
+//     }
+//     // var newColumn = document.createElement("div");
 
-    // newColumn.id = "col" + x;
-    // appendChild
+//     // newColumn.id = "col" + x;
+//     // appendChild
 
-    document.getElementById("winner_notif").style.height = '115px';
+//     document.getElementById("winner_notif").style.height = '115px';
 
-    document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
+//     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
 
 
-};
+// };
 
 
 var check_for_winner = (current_player_color) => {
@@ -254,31 +260,21 @@ var check_for_winner = (current_player_color) => {
 
 var check_horiz = (current_player_color) => {
     var connect4_win = 0;
-    for (let row = 0; row < gameState[0].length; row++) {
-        for (let column = 0; column < gameState.length; column++) {
-
-            console.log(gameState[column][row]);
-            console.log(current_player_color);
+    for (let row = 0; row < ROWS; row++) {
+        connect4_win = 0;
+        for (let column = 0; column < COLUMNS; column++) {
             if (gameState[column][row] == current_player_color) {
                 connect4_win += 1;
-                if (connect4_win >= 4) {
-                    if (gameState[column][row] == current_player_color) {
-                        connect4_win += 1;
-                        if (connect4_win >= 4) {
-                            // could make em glow here
-                            console.log('horiz winner true');
-                            return true
-                        }
-                    } else {
-                        connect4_win = 0;
-                    }
-
-
-                }
+            } else {
+                connect4_win = 0;
             }
-            return false
+            if (connect4_win == 4) {
+                console.log('winner! horizontal');
+                return true
+            }
         }
     }
+    return false
 }
 
 var check_vert = (current_player_color) => {
