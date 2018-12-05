@@ -55,13 +55,14 @@ class AI_API {
 
     // An AI that copies the opponent's last move
     static run_improved_copy_cat_ai(opponent_move, board_state) {
-        valid_move = true;
-
+        var valid_move = true;
         // this checks for horizontal wins and has the AI block them. 
         // You could also teach the bot to win if it saw a similar pattern with its color rather than the opponents.
+        // or respond earlier if the opponent plays two in a row, and block the scenario in which their opponent can play on other side of 3 tiles
         let opponent_player_color = 'yellow';
-        let connect4_win = 0
-        var AI_move = opponent_move;
+        let connect4_win = 0;
+        var AI_move = 0;
+        AI_move = opponent_move;
         do {
             // checks for a win horizontally, sets opponent move if needed
             for (let row = 0; row < board_state[0].length; row++) {
@@ -70,171 +71,170 @@ class AI_API {
                     console.log(opponent_move);
                     if (board_state[column][row] == opponent_player_color) {
                         connect4_win += 1;
-                    }
-                    else {
+                    } else {
                         connect4_win = 0;
                     }
                     if (connect4_win >= 3) {
-                        console.log('horiz winner if player plays at ');
+                        console.log('horiz winner if player plays at... somewhere ');
+                        console.log('last column checked', column)
                         if (column < 6) {
                             if (board_state[column + 1][row] == 'white') {
-                                console.log('block by playing in column', column + 1)
-                                AI_move = column+1;
+                                AI_move = column + 1;
+                                break
                             }
                         }
-                        if (column > 4) {
-                        if (gameState[column - 4][row] == 'white')
-                        {
-                            AI_Move = column-4;
+                        else if (column > 4) {
+                            if (gameState[column - 3][row] == 'white') {
+                                AI_move = column - 3;
+                                break
+                            }
                         }
-                    }
 
                     }
                 }
             }
-        if (valid_move == false) {
-            AI_move = Math.floor(Math.random() * 100000) % 7;
-        }
-        var valid_move = this.clickColumn(AI_move);
-    }
-    while (valid_move == false)
-};
-
-// A place for you to code your own AI
-static run_your_ai(opponent_move, board_state) {
-    return;
-};
-};
-
-
-// Creates a new game board using versus an AI
-document.getElementById("AI_NewGame").addEventListener("click", function() {
-    [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
-    AI_ON = true;
-    createBoard(gameState);
-    createMoves(print_column_full);
-    makeInfo(AI_ON, playerState);
-});
-
-// Creates a new game board for two players
-document.getElementById("newGameButton").addEventListener("click", function() {
-    [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
-    AI_ON = false;
-    createBoard(gameState);
-    createMoves(print_column_full);
-    makeInfo(AI_ON, playerState);
-});
-
-// Saves the game state to the HTML5 web storage
-document.getElementById("saveGameButton").addEventListener("click", function() {
-    try {
-        saveGame(gameState, colState, playerState, AI_ON)
-        alert('Game successfully saved');
-    } catch (error) {
-        console.log(error);
-        alert('Game cannot be saved');
-    }
-})
-
-// Loads the game state from HTML5 web storage
-document.getElementById("loadGameButton").addEventListener("click", function() {
-    try {
-        [gameState, colState, playerState, AI_ON] = loadGame();
-        createBoard(gameState);
-        createMoves(print_column_full);
-        document.getElementById("winner_notif").style.height = '0px';
-        document.getElementById("winner_notif").innerHTML = '';
-        makeInfo(AI_ON, playerState);
-        var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
-        if (winner) {
-            end_game(winner, COLUMNS);
-            return;
-        }
-    } catch (error) {
-        console.log(error);
-        alert('Game cannot be loaded');
-    }
-})
-
-// Adds an event listener to every column that was created
-var createMoves = (print_column_full) => {
-    for (let x = 0; x < COLUMNS; x++) {
-        // Changes the color of the lowest slot when mousing over over a column
-        document.getElementById("col" + x).addEventListener("mouseover", function() {
-            if ((document.getElementById("s" + x + colState[x])) == null) {
-                print_column_full()
-            } else {
-                document.getElementById("s" + x + colState[x]).style.backgroundColor = "grey";
+            if (valid_move == false) {
+                AI_move = Math.floor(Math.random() * 100000) % 7;
             }
-        });
+            valid_move = this.clickColumn(AI_move);
+        }
+        while (valid_move == false)
+    };
 
-        // Changes the color back on mouseout
-        document.getElementById("col" + x).addEventListener("mouseout", function() {
-            if ((document.getElementById("s" + x + colState[x])) == null) {
-                print_column_full()
-            } else {
-                document.getElementById("s" + x + colState[x]).style.backgroundColor = EMPTY_SLOT_COLOR;
-            }
-        });
-
-        // Clicking the column drops a token to the lowest available slot and gives the turn to the next player
-        document.getElementById("col" + x).addEventListener("click", function() {
-            if ((document.getElementById("s" + x + colState[x])) == null) {
-                print_column_full();
-            } else {
-                if (playerState == PLAYER_ONE_COLOR) {
-                    gameState[x][colState[x]] = PLAYER_ONE_COLOR;
-                    document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_ONE_COLOR;
-                    colState[x]++;
-                    playerState = PLAYER_TWO_COLOR;
-                    replaceTurn(playerState);
-                    write_move();
-
-                    var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
-                    if (winner) {
-                        end_game(PLAYER_ONE_COLOR, COLUMNS);
-                        return;
-                    };
-
-                    // Start AI if the AI is on
-                    if (AI_ON == true && playerState == PLAYER_TWO_COLOR) {
-                        const I_Robot = new AI_API();
-                        console.log('run ai start');
-                        // Change the AI function to yours here
-                        AI_API.run_improved_copy_cat_ai(x, gameState.slice(0));
-                    };
-
-                } else if (playerState == PLAYER_TWO_COLOR) {
-                    gameState[x][colState[x]] = PLAYER_TWO_COLOR;
-                    document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
-                    colState[x]++;
-                    playerState = PLAYER_ONE_COLOR;
-                    replaceTurn(playerState);
-
-                    var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
-                    if (winner) {
-                        end_game(PLAYER_TWO_COLOR, COLUMNS);
-                        return;
-                    };
-                };
-            };
-        });
+    // A place for you to code your own AI
+    static run_your_ai(opponent_move, board_state) {
+        return;
     };
 };
 
-var write_move = () => {
-    var s = window.location.href;
-    var n = s.split('/');
-    n.pop();
-    var c = n.join('/');
+    // Creates a new game board using versus an AI
+    document.getElementById("AI_NewGame").addEventListener("click", function() {
+        [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
+        AI_ON = true;
+        createBoard(gameState);
+        createMoves(print_column_full);
+        makeInfo(AI_ON, playerState);
+    });
 
-    var theUrl = c + '/update_score';
+    // Creates a new game board for two players
+    document.getElementById("newGameButton").addEventListener("click", function() {
+        [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
+        AI_ON = false;
+        createBoard(gameState);
+        createMoves(print_column_full);
+        makeInfo(AI_ON, playerState);
+    });
 
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            console.log(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true);
-    xmlHttp.send(null);
-};
+    // Saves the game state to the HTML5 web storage
+    document.getElementById("saveGameButton").addEventListener("click", function() {
+        try {
+            saveGame(gameState, colState, playerState, AI_ON)
+            alert('Game successfully saved');
+        } catch (error) {
+            console.log(error);
+            alert('Game cannot be saved');
+        }
+    })
+
+    // Loads the game state from HTML5 web storage
+    document.getElementById("loadGameButton").addEventListener("click", function() {
+        try {
+            [gameState, colState, playerState, AI_ON] = loadGame();
+            createBoard(gameState);
+            createMoves(print_column_full);
+            document.getElementById("winner_notif").style.height = '0px';
+            document.getElementById("winner_notif").innerHTML = '';
+            makeInfo(AI_ON, playerState);
+            var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
+            if (winner) {
+                end_game(winner, COLUMNS);
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+            alert('Game cannot be loaded');
+        }
+    })
+
+    // Adds an event listener to every column that was created
+    var createMoves = (print_column_full) => {
+        for (let x = 0; x < COLUMNS; x++) {
+            // Changes the color of the lowest slot when mousing over over a column
+            document.getElementById("col" + x).addEventListener("mouseover", function() {
+                if ((document.getElementById("s" + x + colState[x])) == null) {
+                    print_column_full()
+                } else {
+                    document.getElementById("s" + x + colState[x]).style.backgroundColor = "grey";
+                }
+            });
+
+            // Changes the color back on mouseout
+            document.getElementById("col" + x).addEventListener("mouseout", function() {
+                if ((document.getElementById("s" + x + colState[x])) == null) {
+                    print_column_full()
+                } else {
+                    document.getElementById("s" + x + colState[x]).style.backgroundColor = EMPTY_SLOT_COLOR;
+                }
+            });
+
+            // Clicking the column drops a token to the lowest available slot and gives the turn to the next player
+            document.getElementById("col" + x).addEventListener("click", function() {
+                if ((document.getElementById("s" + x + colState[x])) == null) {
+                    print_column_full();
+                } else {
+                    if (playerState == PLAYER_ONE_COLOR) {
+                        gameState[x][colState[x]] = PLAYER_ONE_COLOR;
+                        document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_ONE_COLOR;
+                        colState[x]++;
+                        playerState = PLAYER_TWO_COLOR;
+                        replaceTurn(playerState);
+                        write_move();
+
+                        var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
+                        if (winner) {
+                            end_game(PLAYER_ONE_COLOR, COLUMNS);
+                            return;
+                        };
+
+                        // Start AI if the AI is on
+                        if (AI_ON == true && playerState == PLAYER_TWO_COLOR) {
+                            const I_Robot = new AI_API();
+                            console.log('run ai start');
+                            // Change the AI function to yours here
+                            AI_API.run_improved_copy_cat_ai(x, gameState.slice(0));
+                        };
+
+                    } else if (playerState == PLAYER_TWO_COLOR) {
+                        gameState[x][colState[x]] = PLAYER_TWO_COLOR;
+                        document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
+                        colState[x]++;
+                        playerState = PLAYER_ONE_COLOR;
+                        replaceTurn(playerState);
+
+                        var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
+                        if (winner) {
+                            end_game(PLAYER_TWO_COLOR, COLUMNS);
+                            return;
+                        };
+                    };
+                };
+            });
+        };
+    };
+
+    var write_move = () => {
+        var s = window.location.href;
+        var n = s.split('/');
+        n.pop();
+        var c = n.join('/');
+
+        var theUrl = c + '/update_score';
+
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                console.log(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true);
+        xmlHttp.send(null);
+    };
