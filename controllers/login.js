@@ -19,10 +19,8 @@ router.post('/loginAttempt', (request, response) => {
             }
         }
 
-        // not sure this is wroking
         // user isnt in database
         if (!user_data || existing_users == []) {
-            console.log('please register');
             response.render('registrationForm.hbs', {
             formData_error: false,
             nameIsNotValid: false,
