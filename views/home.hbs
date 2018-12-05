@@ -10,35 +10,21 @@
     <div>
         <h1> Connect 4 </h1>
     </div>
-
-
-     <!-- should probably do center with css but I don't want to break it -->
     <center>
-    <button class='submit_button shadow' id="newGameButton">New Game</button>
-
-    <button class='submit_button shadow' id='AI_NewGame'>New Game Against AI</button>
-
-    <button id="saveGameButton" class='submit_button shadow'>Save Game</button>
-
-    <button id="loadGameButton" class='submit_button shadow'>Load Game</button>
-
-   <div id="winner_notif"> </div>
-    <div id="board"></div>
-	</center>
-
-    {{#unless loggedIn}}   
+        <button class='submit_button shadow' id='AI_NewGame'>Single Player</button>
+        <button class='submit_button shadow' id="newGameButton">Two Player</button>
+        <button id="saveGameButton" class='submit_button shadow'>Save Game</button>
+        <button id="loadGameButton" class='submit_button shadow'>Load Game</button>
+        <div id="winner_notif"></div>
+        <div id="board"></div>
+    </center>
+    {{#unless loggedIn}}
     {{> loginForm }}
-    {{/unless}}     
-
-
+    {{/unless}}
     {{#if loggedIn}}
     {{> user_stats }}
     <a href="/logout"><button class='submit_button shadow'>Log Out</button></a>
     {{/if}}
-
-
-
-    
     <script src="/js/home.js" type="module"></script>
 </body>
 

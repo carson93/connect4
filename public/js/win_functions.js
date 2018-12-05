@@ -42,6 +42,7 @@ var check_for_winner = (current_player_color, curGameState, rows, columns, empCo
     return false
 }
 
+
 var end_game = (player_color, columns) => {
     for (let x = 0; x < columns; x++) {
         var el = document.getElementById('col' + x),
@@ -49,15 +50,10 @@ var end_game = (player_color, columns) => {
 
         el.parentNode.replaceChild(elClone, el);
     };
-    // var newColumn = document.createElement("div");
 
-    // newColumn.id = "col" + x;
-    // appendChild
     document.getElementById("winner_notif").style.height = '115px';
 
     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
-
-
 };
 
 export { end_game, check_for_winner };

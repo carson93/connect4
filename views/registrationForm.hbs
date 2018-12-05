@@ -10,68 +10,49 @@
     <div>
         <h1> Connect 4 Registration </h1>
     </div>
-
     <div id='loginOuterDiv'>
-  <div id='loginFormDiv' class="shadow">
-    <form action="/registrationAttempt" method="post">
-
-      <label for="login">Login: </label>
-        </br>
+        <div id='loginFormDiv' class="shadow">
+            <form action="/registrationAttempt" method="post">
+                <label for="login">Login: </label>
+                </br>
                 {{#if formData_error}}
                 <div class="formMessage">Error parsing data, please refresh and try again</div>
-                    {{/if}}
-
-
-        {{#if nameIsNotValid}}
+                {{/if}}
+                {{#if nameIsNotValid}}
                 <div class="formMessage">Account name is invalid, it has symbols or other illegal characters</div>
                 {{else}}
-                    {{#if duplicateName}}
-                      <div class="formMessage">Account name already exists</div>
-                    {{/if}}
-              {{/if}}
-
-      <input id="login" class="input_box" type="text" name="login">
-        </br>
-
-      <label for="password">Password: </label>
-        </br>
-        {{#if passIsNotValid}}
+                {{#if duplicateName}}
+                <div class="formMessage">Account name already exists</div>
+                {{/if}}
+                {{/if}}
+                <input id="login" class="input_box" type="text" name="login">
+                </br>
+                <label for="password">Password: </label>
+                </br>
+                {{#if passIsNotValid}}
                 <div class="formMessage">Password is invalid (sorry, no special characters!)</div>
-                    {{/if}}
-
-      <input id="password" class="input_box" type="password" name="password">
-        </br>
-
-        
-      <label for="password_conf">Confirm Password: </label>
-        </br>
-                      {{#if passMatches}}
+                {{/if}}
+                <input id="password" class="input_box" type="password" name="password">
+                </br>
+                <label for="password_conf">Confirm Password: </label>
+                </br>
+                {{#if passMatches}}
                 <div class="formMessage">Password confirmation doesn't match password!</div>
-                    {{/if}}
-
-      <input id="password_conf" class="input_box" type="password" name="password_conf">
-        </br>
-
-      <label for="email">Email: </label>
-        </br>
-
+                {{/if}}
+                <input id="password_conf" class="input_box" type="password" name="password_conf">
+                </br>
+                <label for="email">Email: </label>
+                </br>
                 {{#if emailIsNotValid}}
                 <div class="formMessage">Email is invalid</div>
-                    {{/if}}
-
-      <input id="email" class="input_box" type="text" name="email">
-
-        </br>
-      <input id="login-submit" class="submit_button" type="submit" value="Register">
-    
-
-
-    </form>
-  </div>
-</div>
-</div>
-
-
+                {{/if}}
+                <input id="email" class="input_box" type="text" name="email">
+                </br>
+                <input id="login-submit" class="submit_button" type="submit" value="Register">
+            </form>
+        </div>
+    </div>
+    </div>
 </body>
 
 </html>

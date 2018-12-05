@@ -45,7 +45,6 @@ var createBoard = (gameState) => {
 };
 
 var print_column_full = () => {
-    // should probably also get called on mouseover, depending how its implemented
     console.log('print_column_full was called');
     return "Rwar";
 };

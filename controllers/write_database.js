@@ -1,13 +1,5 @@
-// wip, is literally just load
-
-
-
-// // write the inventory to file
-// var resultString = JSON.stringify(asset_key);
-// fs.writeFileSync('inventory.json', resultString);
-
-
 const fs = require('fs');
+
 
 var writeDatabase = (updated_database) => {
     try {

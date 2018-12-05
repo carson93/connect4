@@ -19,7 +19,6 @@ class AI_API {
         this.name = "robot";
     }
 
-    // redundant repeat of above method, simplified
     static clickColumn(column_number) {
         if (colState[column_number] >= 6) {
             return false;
@@ -110,43 +109,6 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
     }
 })
 
-// var newGameState = () => {
-//     document.getElementById("winner_notif").style.height = '0px';
-//     document.getElementById("winner_notif").innerHTML = '';
-//     playerState = PLAYER_ONE_COLOR;
-//     colState = EMPTY_COL_STATE.slice(0);
-//     gameState = EMPTY_GAME_STATE.slice(0);
-
-//     for (let col = 0; col < COLUMNS; col++) {
-//         var column = []
-//         for (let row = 0; row < ROWS; row++) {
-//             column.push(EMPTY_SLOT_COLOR);
-//         }
-//         gameState.push(column);
-//     }
-// }
-
-// var createBoard = () => {
-//     document.getElementById("board").innerHTML = "";
-
-//     for (let x = 0; x < COLUMNS; x++) {
-//         var newColumn = document.createElement("div");
-//         document.getElementById("board").appendChild(newColumn);
-
-//         newColumn.className = "columns";
-//         newColumn.id = "col" + x;
-
-//         for (let y = 0; y < ROWS; y++) {
-//             var newSlot = document.createElement("div");
-//             newColumn.prepend(newSlot);
-
-//             newSlot.className = "slots";
-//             newSlot.id = "s" + x + y;
-//             newSlot.style.backgroundColor = gameState[x][y];
-//         };
-//     };
-// };
-
 var createMoves = (print_column_full) => {
     for (let x = 0; x < COLUMNS; x++) {
         document.getElementById("col" + x).addEventListener("mouseover", function() {
@@ -186,10 +148,8 @@ var createMoves = (print_column_full) => {
 
                     // start ai code if needed
                     if (AI_ON == true && playerState == PLAYER_TWO_COLOR) {
-                        // console.log('initialize AI');
                         const I_Robot = new AI_API();
                         console.log('run ai start');
-                        // slice prevents any  ai action from breaking the game, I hope
                         AI_API.run_random_ai(x, gameState.slice(0));
                     }
                     // end ai code
@@ -222,7 +182,7 @@ var write_move = () => {
     var c = n.join('/');
 
     var theUrl = c + '/update_score';
-    // the above two vars used to be arguments
+
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -231,10 +191,3 @@ var write_move = () => {
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 };
-
-// var print_column_full = () => {
-//     // should probably also get called on mouseover, depending how its implemented
-//     console.log('print_column_full was called');
-//     return "Rwar";
-// };
-
