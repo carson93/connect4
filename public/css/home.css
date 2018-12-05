@@ -1,3 +1,12 @@
+body {
+    background-color: white;
+    background-image:
+        radial-gradient(pink 20%, transparent 0),
+        radial-gradient(lavender 20%, transparent 0);
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+}
+
 .columns {
     width: 60px;
     height: 345px;
@@ -17,32 +26,32 @@
 }
 
 .shadow {
-    border:1px solid rgba(0,0,0,0.04);
+    border: 1px solid rgb(0,0,0,0.4);
 }
 
-h1{
-    text-align:center;
+h1 {
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
-.input_box{
-
-}
-
-.submit_button
-{
+.submit_button {
     background-color: #e7e7e7;
     color: black;
     border-radius: 12px;
     margin: 15px;
     padding: 16px;
-
+    font-weight: bold;
 }
 
-#loginOuterDiv  {
-    text-align:center;
-    display:block;
-    position:relative;
+#users {
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+}
 
+#loginOuterDiv {
+    text-align: center;
+    display: block;
+    position: relative;
 }
 
 #winner_notif {
@@ -50,11 +59,9 @@ h1{
     font-size: 72px;
     color: black;
     font-family: Helvetica, Arial, sans-serif;
-/*    text-shadow: -1px -1px 1px #aaa,
-             0px 1px 0.5px rgba(0,0,0,0.5),
-             1px 1px 2px rgba(0,0,0,0.7),
-             0px 0px 3px rgba(0,0,0,0.4);*/
+}
 
-
-
+label {
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
 }

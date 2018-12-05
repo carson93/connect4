@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 
-
 var getDatabase = () => {
     try {
         if (fs.existsSync('users_database.json')) {

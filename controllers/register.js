@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { parse } = require('querystring');
-const request = require('request');
 const bcrypt = require('bcrypt');
+
 const load_database = require('./load_database');
 const write_database = require('./write_database');
 const saltRounds = process.env.SALT || 10;
@@ -15,15 +15,13 @@ router.get('/registrationForm', (request, response) => {
         passIsNotValid: false,
         passMatches: false,
         emailIsNotValid: false
-    })
-
+    });
 });
 
 router.post('/registrationAttempt', (request, response) => {
-
     var registration_data_dict = request.body;
     var existing_users = load_database.getDatabase();
-    
+
     var form_missing = (Object.keys(registration_data_dict).length != 4);
     var invalid_name = (!validateName(registration_data_dict['login']));
     var valid_pass = (!validateName(registration_data_dict['password']));
@@ -40,36 +38,33 @@ router.post('/registrationAttempt', (request, response) => {
             passIsNotValid: valid_pass,
             passMatches: passes_match,
             emailIsNotValid: valid_email
-        })
-    } 
-    else {
-
+        });
+    } else {
         delete registration_data_dict["password_conf"];
-
 
         bcrypt.hash(registration_data_dict['password'], saltRounds).then((hash) => {
             registration_data_dict['password'] = hash;
             registration_data_dict['moves_made'] = 0;
-            existing_users.push(registration_data_dict)
+            existing_users.push(registration_data_dict);
             return write_database.writeDatabase(existing_users);
         }).then((result) => {
             if (result) {
                 request.session.loggedIn = true;
-                    request.session.userName = registration_data_dict['login'];
-                    request.session.usersDatabase = existing_users;
-                    response.render('home.hbs', {
-                        loggedIn: request.session.loggedIn,
-                        user: request.session.usersDatabase
-                    })
-            }
+                request.session.userName = registration_data_dict['login'];
+                request.session.usersDatabase = existing_users;
+                response.render('home.hbs', {
+                    loggedIn: request.session.loggedIn,
+                    user: request.session.usersDatabase
+                });
+            };
         }).catch((error) => {
             console.log('Something went wrong writing the database.. \n error message:', error);
         }).catch((error) => {
             console.log('Something went wrong hashing the password.. \n error message:', error);
-        })
-    }
-
+        });
+    };
 });
+
 
 var check_duplicate_user = (new_user_name, existing_users_dict) => {
     for (let i = 0; i < existing_users_dict.length; i++) {
@@ -98,14 +93,6 @@ var validateEmail = (email) => {
     result = valid.test(email);
     return result;
 }
-
-// // this does nothing
-router.get('/redirect', (request, response) => {
-    response.render('home.hbs', {
-        loggedIn: request.session.loggedIn
-    })
-
-});
 
 
 module.exports = router;
