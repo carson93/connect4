@@ -1,11 +1,11 @@
-import end_game from './win.js';
+import { end_game, check_for_winner } from './win_functions.js';
+import { newGameState, createBoard, print_column_full } from './board_functions.js';
 
 const ROWS = 6;
 const COLUMNS = 7;
 const EMPTY_SLOT_COLOR = "white";
 const PLAYER_ONE_COLOR = "yellow";
 const PLAYER_TWO_COLOR = "red";
-const FILEPATH = 'game_save/data.json';
 const EMPTY_COL_STATE = [0, 0, 0, 0, 0, 0, 0];
 const EMPTY_GAME_STATE = [];
 
@@ -70,23 +70,17 @@ class AI_API {
 
 
 document.getElementById("AI_NewGame").addEventListener("click", function() {
-    colState = [0, 0, 0, 0, 0, 0, 0];
-    newGameState();
-    playerState = PLAYER_ONE_COLOR;
+    [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
     AI_ON = true;
-    game_over = false;
-    createBoard();
-    createMoves();
+    createBoard(gameState);
+    createMoves(print_column_full);
 });
 
 document.getElementById("newGameButton").addEventListener("click", function() {
-    colState = [0, 0, 0, 0, 0, 0, 0];
-    newGameState();
-    playerState = PLAYER_ONE_COLOR;
+    [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
     AI_ON = false;
-    game_over = false;
-    createBoard();
-    createMoves();
+    createBoard(gameState);
+    createMoves(print_column_full);
 });
 
 document.getElementById("saveGameButton").addEventListener("click", function() {
@@ -108,48 +102,52 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
         colState = JSON.parse(localStorage.getItem("colState"));
         playerState = localStorage.getItem("playerState");
         AI_ON = localStorage.getItem("AI_ON") === 'true';
-        createBoard();
-        createMoves();
+        createBoard(gameState);
+        createMoves(print_column_full);
     } catch (error) {
         console.log(error);
         alert('Game cannot be loaded');
     }
 })
 
-var newGameState = () => {
-    gameState = [];
+// var newGameState = () => {
+//     document.getElementById("winner_notif").style.height = '0px';
+//     document.getElementById("winner_notif").innerHTML = '';
+//     playerState = PLAYER_ONE_COLOR;
+//     colState = EMPTY_COL_STATE.slice(0);
+//     gameState = EMPTY_GAME_STATE.slice(0);
 
-    for (let col = 0; col < COLUMNS; col++) {
-        var column = []
-        for (let row = 0; row < ROWS; row++) {
-            column.push(EMPTY_SLOT_COLOR);
-        }
-        gameState.push(column);
-    }
-}
+//     for (let col = 0; col < COLUMNS; col++) {
+//         var column = []
+//         for (let row = 0; row < ROWS; row++) {
+//             column.push(EMPTY_SLOT_COLOR);
+//         }
+//         gameState.push(column);
+//     }
+// }
 
-var createBoard = () => {
-    document.getElementById("board").innerHTML = "";
+// var createBoard = () => {
+//     document.getElementById("board").innerHTML = "";
 
-    for (let x = 0; x < COLUMNS; x++) {
-        var newColumn = document.createElement("div");
-        document.getElementById("board").appendChild(newColumn);
+//     for (let x = 0; x < COLUMNS; x++) {
+//         var newColumn = document.createElement("div");
+//         document.getElementById("board").appendChild(newColumn);
 
-        newColumn.className = "columns";
-        newColumn.id = "col" + x;
+//         newColumn.className = "columns";
+//         newColumn.id = "col" + x;
 
-        for (let y = 0; y < ROWS; y++) {
-            var newSlot = document.createElement("div");
-            newColumn.prepend(newSlot);
+//         for (let y = 0; y < ROWS; y++) {
+//             var newSlot = document.createElement("div");
+//             newColumn.prepend(newSlot);
 
-            newSlot.className = "slots";
-            newSlot.id = "s" + x + y;
-            newSlot.style.backgroundColor = gameState[x][y];
-        };
-    };
-};
+//             newSlot.className = "slots";
+//             newSlot.id = "s" + x + y;
+//             newSlot.style.backgroundColor = gameState[x][y];
+//         };
+//     };
+// };
 
-var createMoves = () => {
+var createMoves = (print_column_full) => {
     for (let x = 0; x < COLUMNS; x++) {
         document.getElementById("col" + x).addEventListener("mouseover", function() {
             if ((document.getElementById("s" + x + colState[x])) == null) {
@@ -180,9 +178,10 @@ var createMoves = () => {
                     write_move();
 
 
-                    winner = check_for_winner(PLAYER_ONE_COLOR);
+                    var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
                         end_game(PLAYER_ONE_COLOR);
+                        return;
                     }
 
                     // start ai code if needed
@@ -203,9 +202,10 @@ var createMoves = () => {
                     playerState = PLAYER_ONE_COLOR;
 
 
-                    winner = check_for_winner(PLAYER_TWO_COLOR);
+                    var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
                         end_game(PLAYER_TWO_COLOR);
+                        return;
                     }
                 };
             }
@@ -215,141 +215,7 @@ var createMoves = () => {
     };
 };
 
-// var end_game = (player_color) => {
-//     for (let x = 0; x < COLUMNS; x++) {
-//         var el = document.getElementById('col' + x),
-//             elClone = el.cloneNode(true);
-
-//         el.parentNode.replaceChild(elClone, el);
-//     }
-//     // var newColumn = document.createElement("div");
-
-//     // newColumn.id = "col" + x;
-//     // appendChild
-
-//     document.getElementById("winner_notif").style.height = '115px';
-
-//     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
-
-
-// };
-
-
-var check_for_winner = (current_player_color) => {
-    console.log('in check for win')
-    if (check_horiz(current_player_color)) {
-        console.log('winner! horizontal');
-        return true;
-    }
-
-    if (check_vert(current_player_color)) {
-        console.log('winner! vertical');
-        return true;
-    }
-    if (check_top_right_left_vert(current_player_color)) {
-        console.log('winner! top_right_left_vert');
-        return true;
-    }
-    // check_bottom_left_left_vert(current_player_color);
-    // check_top_right_vert(current_player_color);
-    // check_bottom_right_vert(current_player_color);
-    // console.log('winner check complete')
-    return false;
-};
-
-
-var check_horiz = (current_player_color) => {
-    var connect4_win = 0;
-    for (let row = 0; row < ROWS; row++) {
-        connect4_win = 0;
-        for (let column = 0; column < COLUMNS; column++) {
-            if (gameState[column][row] == current_player_color) {
-                connect4_win += 1;
-            } else {
-                connect4_win = 0;
-            }
-            if (connect4_win == 4) {
-                console.log('winner! horizontal');
-                return true
-            }
-        }
-    }
-    return false
-}
-
-var check_vert = (current_player_color) => {
-    var connect4_win = 0;
-    for (let column = 0; column < gameState.length; column++) {
-        for (let color_index = 0; color_index < gameState[column].length; color_index++) {
-            if (gameState[column][color_index] == current_player_color) {
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    return true
-                }
-            } else {
-                connect4_win = 0;
-            }
-        }
-    }
-    return false;
-}
-
-
-var check_bottom_left_left_vert = (current_player_color) => {
-
-}
-
-var check_top_right_left_vert = (current_player_color) => {
-    var connect4_win = 0;
-    // column starts early as half of downward left to right vert already checked
-    for (let column = 1; column < gameState.length - 4; column++) {
-        for (let color_index = 1; color_index < gameState[column].length - 4; color_index++) {
-            // console.log(gameState[column][color_index]);
-            // console.log(current_player_color);
-            if (gameState[column][color_index] == current_player_color) {
-
-                // console.log('equality true');
-                connect4_win += 1;
-                if (connect4_win >= 4) {
-                    return true
-                }
-            } else {
-                connect4_win = 0;
-            }
-        }
-    }
-}
-
-var check_top_right_vert = (current_player_color) => {
-
-}
-
-var check_bottom_right_vert = (current_player_color) => {
-
-}
-
-
-// var write_move = () => {
-
-//     // console.log(window.location.href);
-
-//     var s = window.location.href;
-//     var n = s.split('/');
-//     // console.log(n);
-//     n.pop();
-//     // console.log(n);
-//     var c = n.join('/');
-//     // console.log(c);
-
-//     c = c + '/update_score';
-
-//     my_window = window.open(c);
-//     my_window.close();
-//     return "Rwar";
-// };
-
-var write_move = () =>
-{
+var write_move = () => {
     var s = window.location.href;
     var n = s.split('/');
     n.pop();
@@ -358,7 +224,7 @@ var write_move = () =>
     var theUrl = c + '/update_score';
     // the above two vars used to be arguments
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             console.log(xmlHttp.responseText);
     }
@@ -366,31 +232,9 @@ var write_move = () =>
     xmlHttp.send(null);
 };
 
-var print_column_full = () => {
-    // should probably also get called on mouseover, depending how its implemented
-    console.log('print_column_full was called');
-    return "Rwar";
-};
-
-// window.onbeforeunload = () => {
-
-//     console.log(window.location.href);
-
-//     var s = window.location.href;
-//     var n = s.split('/');
-//     console.log(n);
-//     n.pop();
-//     console.log(n);
-//     var c = n.join('/');
-//     console.log(c);
-
-//     c = c + '/update_score'
-
-//     my_window = window.open(c);
-//     my_window.close()
+// var print_column_full = () => {
+//     // should probably also get called on mouseover, depending how its implemented
+//     console.log('print_column_full was called');
 //     return "Rwar";
-// }
+// };
 
-// var sendMovesToDatabase = () => {
-//     
-// }

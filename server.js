@@ -3,13 +3,11 @@ const homeRouter = require('./controllers/home');
 const loginRouter = require('./controllers/login');
 const registerRouter = require('./controllers/register');
 const logOutRouter = require('./controllers/logout');
-const newGameRouter = require('./controllers/new_game');
 const bodyParser = require('body-parser');
 const getMovesRouter = require('./controllers/get_moves');
 
 const hbs = require('hbs');
 var cookieSession = require('cookie-session')
-// const fun = require('./server_functions.js');
 
 var app = express();
 
@@ -18,7 +16,7 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }))
 
-// makes a cookie middleware.. not used right now
+// makes a cookie middleware
 // needs the require cookieSession to work
 app.use(cookieSession({
   name: 'connect4_session',
@@ -54,7 +52,6 @@ app.use('/', loginRouter);
 app.use('/', registerRouter);
 
 app.use('/', logOutRouter);
-app.use('/', newGameRouter);
 app.use('/', getMovesRouter);
 
 // start server
