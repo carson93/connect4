@@ -1,5 +1,5 @@
 import { end_game, check_for_winner } from './win_functions.js';
-import { newGameState, createBoard, print_column_full } from './board_functions.js';
+import { newGameState, createBoard, print_column_full, makeInfo, replaceTurn } from './board_functions.js';
 import { saveGame, loadGame } from './save_load_game.js';
 
 const ROWS = 6;
@@ -67,6 +67,7 @@ document.getElementById("AI_NewGame").addEventListener("click", function() {
     AI_ON = true;
     createBoard(gameState);
     createMoves(print_column_full);
+    makeInfo(AI_ON, playerState);
 });
 
 // Creates a new game board for two players
@@ -75,6 +76,7 @@ document.getElementById("newGameButton").addEventListener("click", function() {
     AI_ON = false;
     createBoard(gameState);
     createMoves(print_column_full);
+    makeInfo(AI_ON, playerState);
 });
 
 // Saves the game state to the HTML5 web storage
@@ -96,8 +98,8 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
         createMoves(print_column_full);
         document.getElementById("winner_notif").style.height = '0px';
         document.getElementById("winner_notif").innerHTML = '';
+        makeInfo(AI_ON, playerState);
         var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
-        console.log(winner);
         if (winner) {
             end_game(winner, COLUMNS);
             return;
@@ -139,6 +141,7 @@ var createMoves = (print_column_full) => {
                     document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_ONE_COLOR;
                     colState[x]++;
                     playerState = PLAYER_TWO_COLOR;
+                    replaceTurn(playerState);
                     write_move();
 
                     var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
@@ -160,6 +163,7 @@ var createMoves = (print_column_full) => {
                     document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
                     colState[x]++;
                     playerState = PLAYER_ONE_COLOR;
+                    replaceTurn(playerState);
 
                     var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {

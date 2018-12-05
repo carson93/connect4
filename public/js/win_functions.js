@@ -51,10 +51,12 @@ var end_game = (player_color, columns) => {
         el.parentNode.replaceChild(elClone, el);
     };
 
-    document.getElementById("winner_notif").style.height = '115px';
+    document.getElementById("winner_notif").style.height = '200px';
     document.getElementById("winner_notif").innerHTML = '';
-
-    document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
+    document.getElementById("info").style.height = '0px';
+    document.getElementById("info").innerHTML = '';
+    var player = player_color.charAt(0).toUpperCase() + player_color.slice(1);
+    document.getElementById("winner_notif").prepend(document.createTextNode(player + " wins!"));
 };
 
 export { end_game, check_for_winner };

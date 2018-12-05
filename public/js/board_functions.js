@@ -51,5 +51,24 @@ var print_column_full = () => {
     return
 };
 
+var makeInfo = (AI, player) => {
+    if (AI === true) {
+        var mode = 'Single Player';
+    } else if (AI === false) {
+        var mode = 'Two Player';
+    }
+    var info = document.getElementById("info");
+    info.innerHTML = '';
+    info.prepend(document.createTextNode('Turn: ' + player));
+    info.prepend(document.createElement("br"));
+    info.prepend(document.createTextNode('Mode: ' + mode));
+    info.style.height = "50px";
+}
 
-export { newGameState, createBoard, print_column_full };
+var replaceTurn = (player) => {
+    var info = document.getElementById("info");
+    var turn = document.createTextNode('Turn: ' + player);
+    info.replaceChild(turn, info.childNodes[2]);
+}
+
+export { newGameState, createBoard, print_column_full, makeInfo, replaceTurn };

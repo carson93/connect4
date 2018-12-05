@@ -31,7 +31,7 @@ body {
 
 h1 {
     text-align: center;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
 }
 
 .submit_button {
@@ -45,7 +45,7 @@ h1 {
 
 #users {
     text-align: center;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
 }
 
 #loginOuterDiv {
@@ -55,13 +55,25 @@ h1 {
 }
 
 #winner_notif {
-    background: url("cong.jpg") center;
+    background-image: url("./cong.png");
+    background-size: 30% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100px;
+    opacity: 0.8;
     font-size: 72px;
+    font-family: cursive;
+    font-style: italic;
     color: black;
-    font-family: Helvetica, Arial, sans-serif;
+}
+
+#info {
+    postion: relative;
+    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
+    font-weight: bold;
 }
 
 label {
     font-weight: bold;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
 }
