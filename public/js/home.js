@@ -14,11 +14,13 @@ var gameState = EMPTY_GAME_STATE;
 var playerState = PLAYER_ONE_COLOR;
 var AI_ON;
 
+// The class that holds the AI methods
 class AI_API {
     constructor() {
         this.name = "robot";
-    }
+    };
 
+    // clickColumn returns false if the column is full and the move is invalid
     static clickColumn(column_number) {
         if (colState[column_number] >= 6) {
             return false;
@@ -27,47 +29,38 @@ class AI_API {
         } else {
             document.getElementById('col' + column_number).click();
             return true;
-        }
-    }
+        };
+    };
 
-    // this is where you code your bot, each class below here is a different bot.
-
-    // clickColumn returns false if the move is not valid
-
+    // Methods that represent a different AI
+    // An AI that randomly selects a column to place a token
     static run_random_ai(opponent_move, board_state) {
-        // console.log('random ai move ');
         do {
             var AI_move = Math.floor(Math.random() * 100000) % 7;
-            // console.log(AI_move);
             var valid_move = this.clickColumn(AI_move);
         } while (valid_move == false)
+    };
 
-    }
+    // An AI that copies the opponent's last move
     static run_copy_cat_ai(opponent_move, board_state) {
-        // console.log('random ai move ');
         valid_move == true;
         do {
             var AI_move = opponent_move;
             if (valid_move == false) {
                 AI_move = Math.floor(Math.random() * 100000) % 7;
             }
-            // console.log(AI_move);
             var valid_move = this.clickColumn(AI_move);
         } while (valid_move == false)
+    };
 
-    }
-
-    static run_copy_cat_improved_ai(opponent_move, board_state) {
-        return
-    }
-
+    // A place for you to code your own AI
     static run_your_ai(opponent_move, board_state) {
-        return
+        return;
+    };
+};
 
-    }
-}
 
-
+// Creates a new game board using versus an AI
 document.getElementById("AI_NewGame").addEventListener("click", function() {
     [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
     AI_ON = true;
@@ -75,6 +68,7 @@ document.getElementById("AI_NewGame").addEventListener("click", function() {
     createMoves(print_column_full);
 });
 
+// Creates a new game board for two players
 document.getElementById("newGameButton").addEventListener("click", function() {
     [gameState, colState, playerState] = newGameState(gameState, colState, playerState);
     AI_ON = false;
@@ -82,6 +76,7 @@ document.getElementById("newGameButton").addEventListener("click", function() {
     createMoves(print_column_full);
 });
 
+// Saves the game state to the HTML5 web storage
 document.getElementById("saveGameButton").addEventListener("click", function() {
     try {
         localStorage.setItem("gameState", JSON.stringify(gameState));
@@ -95,6 +90,7 @@ document.getElementById("saveGameButton").addEventListener("click", function() {
     }
 })
 
+// Loads the game state from HTML5 web storage
 document.getElementById("loadGameButton").addEventListener("click", function() {
     try {
         gameState = JSON.parse(localStorage.getItem("gameState"));
@@ -109,8 +105,10 @@ document.getElementById("loadGameButton").addEventListener("click", function() {
     }
 })
 
+// Adds an event listener to every column that was created
 var createMoves = (print_column_full) => {
     for (let x = 0; x < COLUMNS; x++) {
+        // Changes the color of the lowest slot when mousing over over a column
         document.getElementById("col" + x).addEventListener("mouseover", function() {
             if ((document.getElementById("s" + x + colState[x])) == null) {
                 print_column_full()
@@ -119,6 +117,7 @@ var createMoves = (print_column_full) => {
             }
         });
 
+        // Changes the color back on mouseout
         document.getElementById("col" + x).addEventListener("mouseout", function() {
             if ((document.getElementById("s" + x + colState[x])) == null) {
                 print_column_full()
@@ -127,10 +126,10 @@ var createMoves = (print_column_full) => {
             }
         });
 
-
+        // Clicking the column drops a token to the lowest available slot and gives the turn to the next player
         document.getElementById("col" + x).addEventListener("click", function() {
             if ((document.getElementById("s" + x + colState[x])) == null) {
-                print_column_full()
+                print_column_full();
             } else {
                 if (playerState == PLAYER_ONE_COLOR) {
                     gameState[x][colState[x]] = PLAYER_ONE_COLOR;
@@ -139,39 +138,34 @@ var createMoves = (print_column_full) => {
                     playerState = PLAYER_TWO_COLOR;
                     write_move();
 
-
                     var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
                         end_game(PLAYER_ONE_COLOR, COLUMNS);
                         return;
-                    }
+                    };
 
-                    // start ai code if needed
+                    // Start AI if the AI is on
                     if (AI_ON == true && playerState == PLAYER_TWO_COLOR) {
                         const I_Robot = new AI_API();
                         console.log('run ai start');
+                        // Change the AI function to yours here
                         AI_API.run_random_ai(x, gameState.slice(0));
-                    }
-                    // end ai code
+                    };
 
                 } else if (playerState == PLAYER_TWO_COLOR) {
-
                     gameState[x][colState[x]] = PLAYER_TWO_COLOR;
                     document.getElementById("s" + x + colState[x]).style.backgroundColor = PLAYER_TWO_COLOR;
                     colState[x]++;
                     playerState = PLAYER_ONE_COLOR;
 
-
                     var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
                         end_game(PLAYER_TWO_COLOR, COLUMNS);
                         return;
-                    }
+                    };
                 };
-            }
-
+            };
         });
-
     };
 };
 
@@ -188,6 +182,6 @@ var write_move = () => {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             console.log(xmlHttp.responseText);
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.open("GET", theUrl, true);
     xmlHttp.send(null);
 };
