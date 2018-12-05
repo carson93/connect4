@@ -24,10 +24,6 @@ router.post('/registrationAttempt', (request, response) => {
     var registration_data_dict = request.body;
     var existing_users = load_database.getDatabase();
     
-
-    console.log('valid email', validateEmail(registration_data_dict['email']));
-    console.log('valid email [TEST]', validateEmail('testemail@gmail.com'));
-
     var form_missing = (Object.keys(registration_data_dict).length != 4);
     var invalid_name = (!validateName(registration_data_dict['login']));
     var valid_pass = (!validateName(registration_data_dict['password']));
@@ -58,9 +54,13 @@ router.post('/registrationAttempt', (request, response) => {
             return write_database.writeDatabase(existing_users);
         }).then((result) => {
             if (result) {
-                response.render('home.hbs', {
-                    loggedIn: false
-                })
+                request.session.loggedIn = true;
+                    request.session.userName = registration_data_dict['login'];
+                    request.session.usersDatabase = existing_users;
+                    response.render('home.hbs', {
+                        loggedIn: request.session.loggedIn,
+                        user: request.session.usersDatabase
+                    })
             }
         }).catch((error) => {
             console.log('Something went wrong writing the database.. \n error message:', error);
@@ -72,9 +72,6 @@ router.post('/registrationAttempt', (request, response) => {
 });
 
 var check_duplicate_user = (new_user_name, existing_users_dict) => {
-    console.log('existing_users_dict.length', existing_users_dict.length);
-    console.log('existing_users_dict', existing_users_dict);
-    console.log('new username', new_user_name);
     for (let i = 0; i < existing_users_dict.length; i++) {
         if (existing_users_dict == []) {
             return false;
@@ -92,7 +89,6 @@ var check_duplicate_user = (new_user_name, existing_users_dict) => {
 var validateName = (word_string) => {
     var valid = /^[a-z0-9]+$/i;
     result = valid.test(word_string);
-    console.log('name is: ', result);
     return result;
 }
 
@@ -100,11 +96,10 @@ var validateName = (word_string) => {
 var validateEmail = (email) => {
     var valid = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     result = valid.test(email);
-    console.log('email is: ', result);
     return result;
 }
 
-// // this doesnt nothing
+// // this does nothing
 router.get('/redirect', (request, response) => {
     response.render('home.hbs', {
         loggedIn: request.session.loggedIn
