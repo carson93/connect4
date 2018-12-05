@@ -54,9 +54,9 @@ var end_game = (player_color, columns) => {
     // newColumn.id = "col" + x;
     // appendChild
     document.getElementById("winner_notif").style.height = '115px';
+    document.getElementById("winner_notif").innerHTML = '';
 
     document.getElementById("winner_notif").prepend(document.createTextNode(player_color + " wins!!!!!"));
-
 
 };
 

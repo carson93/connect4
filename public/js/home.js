@@ -1,5 +1,6 @@
 import { end_game, check_for_winner } from './win_functions.js';
 import { newGameState, createBoard, print_column_full } from './board_functions.js';
+import { saveGame, loadGame } from './save_load_game.js';
 
 const ROWS = 6;
 const COLUMNS = 7;
@@ -9,8 +10,8 @@ const PLAYER_TWO_COLOR = "red";
 const EMPTY_COL_STATE = [0, 0, 0, 0, 0, 0, 0];
 const EMPTY_GAME_STATE = [];
 
-var colState = EMPTY_COL_STATE;
-var gameState = EMPTY_GAME_STATE;
+var colState = EMPTY_COL_STATE.slice(0);
+var gameState = EMPTY_GAME_STATE.slice(0);
 var playerState = PLAYER_ONE_COLOR;
 var AI_ON;
 
@@ -85,10 +86,7 @@ document.getElementById("newGameButton").addEventListener("click", function() {
 
 document.getElementById("saveGameButton").addEventListener("click", function() {
     try {
-        localStorage.setItem("gameState", JSON.stringify(gameState));
-        localStorage.setItem("colState", JSON.stringify(colState));
-        localStorage.setItem("playerState", playerState);
-        localStorage.setItem("AI_ON", String(AI_ON));
+        saveGame(gameState, colState, playerState, AI_ON)
         alert('Game successfully saved');
     } catch (error) {
         console.log(error);
@@ -98,54 +96,22 @@ document.getElementById("saveGameButton").addEventListener("click", function() {
 
 document.getElementById("loadGameButton").addEventListener("click", function() {
     try {
-        gameState = JSON.parse(localStorage.getItem("gameState"));
-        colState = JSON.parse(localStorage.getItem("colState"));
-        playerState = localStorage.getItem("playerState");
-        AI_ON = localStorage.getItem("AI_ON") === 'true';
+        [gameState, colState, playerState, AI_ON] = loadGame();
         createBoard(gameState);
         createMoves(print_column_full);
+        document.getElementById("winner_notif").style.height = '0px';
+        document.getElementById("winner_notif").innerHTML = '';
+        var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
+        console.log(winner);
+        if (winner) {
+            end_game(winner, COLUMNS);
+            return;
+        }
     } catch (error) {
         console.log(error);
         alert('Game cannot be loaded');
     }
 })
-
-// var newGameState = () => {
-//     document.getElementById("winner_notif").style.height = '0px';
-//     document.getElementById("winner_notif").innerHTML = '';
-//     playerState = PLAYER_ONE_COLOR;
-//     colState = EMPTY_COL_STATE.slice(0);
-//     gameState = EMPTY_GAME_STATE.slice(0);
-
-//     for (let col = 0; col < COLUMNS; col++) {
-//         var column = []
-//         for (let row = 0; row < ROWS; row++) {
-//             column.push(EMPTY_SLOT_COLOR);
-//         }
-//         gameState.push(column);
-//     }
-// }
-
-// var createBoard = () => {
-//     document.getElementById("board").innerHTML = "";
-
-//     for (let x = 0; x < COLUMNS; x++) {
-//         var newColumn = document.createElement("div");
-//         document.getElementById("board").appendChild(newColumn);
-
-//         newColumn.className = "columns";
-//         newColumn.id = "col" + x;
-
-//         for (let y = 0; y < ROWS; y++) {
-//             var newSlot = document.createElement("div");
-//             newColumn.prepend(newSlot);
-
-//             newSlot.className = "slots";
-//             newSlot.id = "s" + x + y;
-//             newSlot.style.backgroundColor = gameState[x][y];
-//         };
-//     };
-// };
 
 var createMoves = (print_column_full) => {
     for (let x = 0; x < COLUMNS; x++) {
@@ -231,10 +197,3 @@ var write_move = () => {
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 };
-
-// var print_column_full = () => {
-//     // should probably also get called on mouseover, depending how its implemented
-//     console.log('print_column_full was called');
-//     return "Rwar";
-// };
-
