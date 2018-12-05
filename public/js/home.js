@@ -44,7 +44,6 @@ class AI_API {
 
     // An AI that copies the opponent's last move
     static run_copy_cat_ai(opponent_move, board_state) {
-        valid_move == true;
         do {
             var AI_move = opponent_move;
             if (valid_move == false) {
@@ -54,10 +53,57 @@ class AI_API {
         } while (valid_move == false)
     };
 
-    // A place for you to code your own AI
-    static run_your_ai(opponent_move, board_state) {
-        return;
-    };
+    // An AI that copies the opponent's last move
+    static run_improved_copy_cat_ai(opponent_move, board_state) {
+        valid_move = true;
+
+        // this checks for horizontal wins and has the AI block them. 
+        // You could also teach the bot to win if it saw a similar pattern with its color rather than the opponents.
+        let opponent_player_color = 'yellow';
+        let connect4_win = 0
+        do {
+            var AI_move = opponent_move;
+            // checks for a win horizontally, sets opponent move if needed
+            for (let row = 0; row < board_state[0].length; row++) {
+                for (let column = 0; column < board_state.length; column++) {
+                    console.log(board_state[column][row]);
+                    console.log(opponent_move);
+                    if (board_state[column][row] == opponent_player_color) {
+                        connect4_win += 1;
+                    }
+                    else {
+                        connect4_win = 0;
+                    }
+                    if (connect4_win >= 3) {
+                        console.log('horiz winner if player plays at ');
+                        if (column < 6) {
+                            if (board_state[column + 1][row] == 'white') {
+                                console.log('block by playing in column', column + 1)
+                                AI_move = column+1;
+                            }
+                        }
+                        if (column > 4) {
+                        if (gameState[column - 4][row] == 'white')
+                        {
+                            AI_Move = column-4;
+                        }
+                    }
+
+                    }
+                }
+            }
+        if (valid_move == false) {
+            AI_move = Math.floor(Math.random() * 100000) % 7;
+        }
+        var valid_move = this.clickColumn(AI_move);
+    }
+    while (valid_move == false)
+};
+
+// A place for you to code your own AI
+static run_your_ai(opponent_move, board_state) {
+    return;
+};
 };
 
 
@@ -155,7 +201,7 @@ var createMoves = (print_column_full) => {
                         const I_Robot = new AI_API();
                         console.log('run ai start');
                         // Change the AI function to yours here
-                        AI_API.run_random_ai(x, gameState.slice(0));
+                        AI_API.run_improved_copy_cat_ai(x, gameState.slice(0));
                     };
 
                 } else if (playerState == PLAYER_TWO_COLOR) {
