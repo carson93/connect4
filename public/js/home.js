@@ -61,8 +61,8 @@ class AI_API {
         // You could also teach the bot to win if it saw a similar pattern with its color rather than the opponents.
         let opponent_player_color = 'yellow';
         let connect4_win = 0
+        var AI_move = opponent_move;
         do {
-            var AI_move = opponent_move;
             // checks for a win horizontally, sets opponent move if needed
             for (let row = 0; row < board_state[0].length; row++) {
                 for (let column = 0; column < board_state.length; column++) {
