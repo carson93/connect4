@@ -5,6 +5,24 @@ const request = require('request');
 const load_database = require('./load_database');
 const bcrypt = require('bcrypt');
 
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: true,
+// });
+
+// client.connect();
+
+// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+//   if (err) throw err;
+//   for (let row of res.rows) {
+//     console.log(JSON.stringify(row));
+//   }
+//   client.end();
+// });
+
+
+// router.post('/loginAttempt', )
+
 router.post('/loginAttempt', (request, response) => {
     var login_data_dict = request.body;
         var user_data = 0;

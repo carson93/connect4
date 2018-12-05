@@ -215,7 +215,6 @@ var end_game = (player_color) => {
         el.parentNode.replaceChild(elClone, el);
     }
     // var newColumn = document.createElement("div");
-
     // newColumn.id = "col" + x;
     // appendChild
     document.getElementById("winner_notif").style.height = '115px';
