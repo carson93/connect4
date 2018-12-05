@@ -180,7 +180,7 @@ var createMoves = (print_column_full) => {
 
                     var winner = check_for_winner(PLAYER_ONE_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
-                        end_game(PLAYER_ONE_COLOR);
+                        end_game(PLAYER_ONE_COLOR, COLUMNS);
                         return;
                     }
 
@@ -204,7 +204,7 @@ var createMoves = (print_column_full) => {
 
                     var winner = check_for_winner(PLAYER_TWO_COLOR, gameState, ROWS, COLUMNS, EMPTY_SLOT_COLOR);
                     if (winner) {
-                        end_game(PLAYER_TWO_COLOR);
+                        end_game(PLAYER_TWO_COLOR, COLUMNS);
                         return;
                     }
                 };
